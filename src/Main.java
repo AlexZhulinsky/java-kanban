@@ -1,57 +1,49 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Поехали!");
 
+        TaskManager taskManager = new TaskManager();
         Task task1 = new Task("Задача 1", "Описание задачи 1", Status.NEW);
         Task task2 = new Task("Задача 2", "Описание задачи 2", Status.NEW);
 
-        TaskManager.saveTask(task1);
-        TaskManager.saveTask(task2);
+        taskManager.saveTask(task1);
+        taskManager.saveTask(task2);
 
-        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", Status.NEW);
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", Status.NEW);
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", Status.NEW);
+        System.out.println(taskManager.getTasks());
+        System.out.println();
 
-        TaskManager.saveEpic(epic1);
-        TaskManager.saveSubtask(subtask1);
-        TaskManager.saveSubtask(subtask2);
-        TaskManager.setSubtasksByEpic(epic1, subtask1);
-        TaskManager.setSubtasksByEpic(epic1, subtask2);
+        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1");
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1");
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2");
 
-        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", Status.NEW);
-        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", Status.NEW);
+        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2");
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3");
 
-        TaskManager.saveEpic(epic2);
-        TaskManager.saveSubtask(subtask3);
-        TaskManager.setSubtasksByEpic(epic2, subtask3);
+        taskManager.saveEpic(epic1);
+        taskManager.saveEpic(epic2);
+        subtask1.setEpicIdForThisSubtask(epic1.getId());
+        subtask2.setEpicIdForThisSubtask(epic1.getId());
+        subtask3.setEpicIdForThisSubtask(epic2.getId());
 
-        System.out.println(TaskManager.getTasksByType("Задачи"));
-        System.out.println(TaskManager.getTasksByType("Эпики"));
-        System.out.println(TaskManager.getTasksByType("Подзадачи"));
+        taskManager.saveSubtask(subtask1);
+        taskManager.saveSubtask(subtask2);
+        taskManager.saveSubtask(subtask3);
 
-        System.out.println("Создали трекер задач");
+        System.out.println(taskManager.getEpics());
+        System.out.println();
 
-        TaskManager.updateTask(task1, "Задача 1", "Описание 1", Status.IN_PROGRESS);
-        TaskManager.updateTask(task2, "Задача 2", "Описание 2", Status.IN_PROGRESS);
+        subtask1.setStatus(Status.DONE);
+        subtask2.setStatus(Status.NEW);
+        subtask3.setStatus(Status.IN_PROGRESS);
 
-        TaskManager.updateSubtask(subtask1, "Подзадача 1", "Описание 1", Status.IN_PROGRESS);
-        TaskManager.updateSubtask(subtask2, "Подзадача 2", "Описание 2", Status.DONE);
-        TaskManager.updateSubtask(subtask3, "Подзадача 3", "Описание 3", Status.DONE);
+        taskManager.updateSubtask(subtask1);
+        taskManager.updateSubtask(subtask2);
+        taskManager.updateSubtask(subtask3);
 
-        System.out.println(TaskManager.getTasksByType("Задачи"));
-        System.out.println(TaskManager.getTasksByType("Эпики"));
-        System.out.println(TaskManager.getTasksByType("Подзадачи"));
+        System.out.println(taskManager.getEpics());
+        System.out.println();
 
-        System.out.println("Обновили трекер задач");
-
-        TaskManager.deleteById(task1.getId());
-        TaskManager.deleteById(epic2.getId());
-        TaskManager.deleteById(subtask1.getId());
-
-        System.out.println(TaskManager.getTasksByType("Задачи"));
-        System.out.println(TaskManager.getTasksByType("Эпики"));
-        System.out.println(TaskManager.getTasksByType("Подзадачи"));
-
-        System.out.println("Удалили задачи");
+        taskManager.deleteSubtasks();
+        System.out.println(taskManager.getSubtasks());
+        System.out.println(taskManager.getEpics());
     }
 }
