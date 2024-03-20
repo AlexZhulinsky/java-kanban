@@ -25,13 +25,13 @@ public class TaskManager {
     }
 
     public void saveSubtask(Subtask subtask) {
+        Epic epic = epics.get(subtask.getEpicIdForThisSubtask());
+        if (epic == null) {
+            return;
+        }
         if (!subtasks.containsValue(subtask)) {
             countId++;
             subtask.setId(countId);
-            Epic epic = epics.get(subtask.getEpicIdForThisSubtask());
-            if (epic == null) {
-                return;
-            }
             epic.addSubtasksForEpic(subtask);
             changeEpicStatus(epic);
             subtasks.put(subtask.getId(), subtask);
@@ -93,24 +93,31 @@ public class TaskManager {
     }
 
     public void updateTask(Task task) {
-        Task taskLink = tasks.get(task.getId());
-        taskLink.setName(task.getName());
-        taskLink.setDescription(task.getDescription());
-        taskLink.setStatus(task.getStatus());
+        if (tasks.containsKey(task.getId())) {
+            tasks.put(task.getId(), task);
+        }
     }
 
+
     public void updateSubtask(Subtask subtask) {
-        Subtask subtaskLink = subtasks.get(subtask.getId());
-        subtaskLink.setName(subtask.getName());
-        subtaskLink.setDescription(subtask.getDescription());
-        subtaskLink.setStatus(subtask.getStatus());
-        changeEpicStatus(epics.get(subtask.getEpicIdForThisSubtask()));
+        if (subtasks.containsKey(subtask.getId())) {
+            Subtask subtaskLink = subtasks.get(subtask.getId());
+            if (subtaskLink.getEpicIdForThisSubtask() == subtask.getEpicIdForThisSubtask()) {
+            subtasks.put(subtask.getId(), subtask);
+            Epic epic = epics.get(subtask.getEpicIdForThisSubtask());
+                if (epic != null) {
+                    epic.getSubtasksForThisEpic().put(subtaskLink.getId(), subtaskLink);
+                }
+            }
+        }
     }
 
     public void updateEpic(Epic epic) {
-        Epic epicLink = epics.get(epic.getId());
-        epicLink.setName(epic.getName());
-        epicLink.setDescription(epic.getDescription());
+        if (epics.containsKey(epic.getId())) {
+            Epic epicLink = epics.get(epic.getId());
+            epicLink.setName(epic.getName());
+            epicLink.setDescription(epic.getDescription());
+        }
     }
 
     public void deleteTasks() {

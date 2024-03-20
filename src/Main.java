@@ -12,11 +12,11 @@ public class Main {
         System.out.println();
 
         Epic epic1 = new Epic("Эпик 1", "Описание эпика 1");
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1");
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2");
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", Status.NEW);
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", Status.NEW);
 
         Epic epic2 = new Epic("Эпик 2", "Описание эпика 2");
-        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3");
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", Status.NEW);
 
         taskManager.saveEpic(epic1);
         taskManager.saveEpic(epic2);
